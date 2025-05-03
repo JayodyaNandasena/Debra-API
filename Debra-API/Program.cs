@@ -17,10 +17,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
 
-builder.Services.AddDbContext<AppDBContext>(options => 
+builder.Services.AddDbContext<AppDBContext>(options =>
     options.UseSqlServer(
-        Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
-        ));
+        Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ?? 
+        throw new InvalidOperationException("Connection string not found.")
+        )
+    );
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
